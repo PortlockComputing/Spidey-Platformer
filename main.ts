@@ -20,6 +20,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.goal, function (sprite, otherSprite) {
     CurrentLevel += 1
+    clearItems()
     setLevelTitleMap()
 })
 function setLevelTitleMap () {
@@ -62,7 +63,7 @@ function setLevelTitleMap () {
             2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
             `, [myTiles.transparency16,myTiles.tile1,myTiles.tile2,myTiles.tile11], TileScale.Sixteen))
     } else if (CurrentLevel == 2) {
-        tiles.setTilemap(tiles.createTilemap(hex`1000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010101010000000000000200000000000000000000000000000301010101010101010101010101010101`, img`
+        tiles.setTilemap(tiles.createTilemap(hex`1000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040101010101010000000000000200000000000000000000000000000301010101010101010101010101010101`, img`
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
@@ -79,12 +80,11 @@ function setLevelTitleMap () {
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-            `, [myTiles.transparency16,myTiles.tile1,myTiles.tile2,myTiles.tile11], TileScale.Sixteen))
+            `, [myTiles.transparency16,myTiles.tile1,myTiles.tile2,myTiles.tile11,myTiles.tile5], TileScale.Sixteen))
     } else {
         game.over(true, effects.hearts)
     }
     MyHero.ay = 350
-    info.setLife(3)
     scene.cameraFollowSprite(MyHero)
     tiles.placeOnRandomTile(MyHero, myTiles.tile2)
     for (let value of tiles.getTilesByType(myTiles.tile2)) {
@@ -155,6 +155,16 @@ function setLevelTitleMap () {
             `, SpriteKind.goal)
         tiles.placeOnTile(exit, value)
         tiles.setTileAt(value, myTiles.transparency16)
+    }
+}
+function clearItems () {
+    evilSpider.destroy()
+    thePrize.destroy()
+    for (let value of sprites.allOfKind(SpriteKind.evilSpider)) {
+        evilSpider.destroy()
+    }
+    for (let value of sprites.allOfKind(SpriteKind.thePrize)) {
+        thePrize.destroy()
     }
 }
 let exit: Sprite = null
@@ -304,6 +314,7 @@ scene.setBackgroundImage(img`
     eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeffeeeeeeeeeeeeeeeeeeee
     `)
 CurrentLevel = 0
+info.setLife(3)
 controller.moveSprite(MyHero, 100, 0)
 setLevelTitleMap()
 music.playMelody("C5 G B A F A C5 B ", 200)
